@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pabee ClubOS — Menu</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --accent:    #c84b2f;
+  --accent-bg: #fdf1ee;
+  --accent-border: #f0c4b8;
+  --bg:        #f7f6f2;
+  --white:     #ffffff;
+  --ink:       #1a1814;
+  --ink2:      #3d3a34;
+  --muted:     #7a756c;
+  --muted2:    #b0aba2;
+  --border:    #e4e1da;
+  --border2:   #ccc9c1;
+  --success:   #2a7d52;
+  --success-bg:#edf7f2;
+  --warning:   #b45309;
+  --warning-bg:#fef6e7;
+  --danger:    #c0392b;
+  --danger-bg: #fdecea;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { font-size: 14px; }
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── TOP NAV ── */
+.topnav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 24px; height: 58px;
+}
+.topnav-logo {
+  display: flex; align-items: center; gap: 9px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem; font-weight: 700; color: var(--ink);
+  border-right: 1px solid var(--border); padding-right: 16px; margin-right: 4px;
+  letter-spacing: 0.01em;
+}
+.logo-box {
+  background: var(--accent); color: #fff;
+  width: 34px; height: 34px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.82rem; font-weight: 800; font-family: 'Outfit', sans-serif;
+}
+.role-badge {
+  background: var(--accent-bg); border: 1px solid var(--accent-border);
+  border-radius: 5px; padding: 4px 11px; font-size: 0.71rem;
+  font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 5px;
+}
+.user-chip {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 5px; padding: 4px 11px;
+  font-size: 0.71rem; font-weight: 500; color: var(--muted);
+}
+.user-chip strong { color: var(--ink); }
+.ml-auto { margin-left: auto; }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); animation: pulse 1.5s ease-in-out infinite; display: inline-block; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+.nav-clock {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 5px; padding: 4px 11px; font-size: 0.8rem;
+  font-weight: 700; color: var(--ink2); font-variant-numeric: tabular-nums;
+}
+.nav-btn-outline {
+  background: var(--white); color: var(--muted);
+  border: 1px solid var(--border); border-radius: 5px; padding: 6px 12px;
+  font-weight: 600; font-size: 0.72rem; cursor: pointer;
+  display: flex; align-items: center; gap: 5px;
+  font-family: 'Outfit', sans-serif; transition: 0.15s;
+}
+.nav-btn-outline:hover { background: var(--bg); color: var(--ink); }
+
+/* ── SCREEN MANAGER ── */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ══════════════════════════════
+   SCREEN 1 — CATEGORIES
+══════════════════════════════ */
+
+/* Page header */
+.page-header {
+  padding: 32px 28px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--white);
+  display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+}
+.page-header-left {}
+.page-eyebrow {
+  font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.16em; color: var(--accent); margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px;
+}
+.page-eyebrow::before { content:''; width:18px; height:1.5px; background:var(--accent); display:inline-block; }
+.page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem; font-weight: 700; color: var(--ink); line-height: 1.1;
+}
+.page-title em { font-style: italic; font-weight: 400; color: var(--muted); }
+.page-sub {
+  font-size: 0.76rem; color: var(--muted); margin-top: 6px; line-height: 1.6;
+}
+.page-stats {
+  display: flex; gap: 24px;
+}
+.page-stat { text-align: right; }
+.page-stat-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem; font-weight: 700; color: var(--ink); line-height: 1;
+}
+.page-stat-lbl { font-size: 0.62rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+
+/* Search */
+.search-wrap {
+  padding: 16px 28px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+.search-box { position: relative; max-width: 340px; }
+.search-box i {
+  position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+  color: var(--muted2); font-size: 0.78rem;
+}
+.search-input {
+  width: 100%; background: var(--bg);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 8px 12px 8px 32px; font-size: 0.8rem;
+  color: var(--ink); font-family: 'Outfit', sans-serif; outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+.search-input::placeholder { color: var(--muted2); }
+.search-input:focus { border-color: var(--accent); background: var(--white); }
+
+/* Section labels */
+.cat-section-label {
+  font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.16em; color: var(--muted);
+  padding: 22px 28px 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.cat-section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* Category grid */
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1px; padding: 0;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin: 0 28px 0;
+}
+
+.cat-card {
+  position: relative; background: var(--white);
+  cursor: pointer; padding: 20px 22px;
+  display: flex; align-items: center; gap: 16px;
+  transition: background 0.15s;
+  animation: fadeUp 0.3s ease both;
+}
+.cat-card:hover { background: var(--bg); }
+.cat-card:hover .cat-card-arrow { opacity: 1; transform: translateX(0); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.cat-card:nth-child(1){animation-delay:0.04s}
+.cat-card:nth-child(2){animation-delay:0.08s}
+.cat-card:nth-child(3){animation-delay:0.12s}
+.cat-card:nth-child(4){animation-delay:0.16s}
+.cat-card:nth-child(5){animation-delay:0.20s}
+.cat-card:nth-child(6){animation-delay:0.24s}
+.cat-card:nth-child(7){animation-delay:0.28s}
+.cat-card:nth-child(8){animation-delay:0.32s}
+
+.cat-card-icon-wrap {
+  width: 48px; height: 48px; border-radius: 10px;
+  background: var(--bg); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+.cat-card:hover .cat-card-icon-wrap {
+  background: var(--accent-bg); border-color: var(--accent-border);
+}
+.cat-card-info { flex: 1; min-width: 0; }
+.cat-card-name {
+  font-size: 0.9rem; font-weight: 700; color: var(--ink); line-height: 1.2;
+}
+.cat-card-sub {
+  font-size: 0.68rem; color: var(--muted); margin-top: 2px;
+}
+.cat-card-count {
+  font-size: 0.62rem; font-weight: 700; color: var(--accent);
+  background: var(--accent-bg); border: 1px solid var(--accent-border);
+  border-radius: 10px; padding: 1px 8px; margin-top: 5px; display: inline-block;
+}
+.cat-card-arrow {
+  color: var(--muted2); font-size: 0.72rem;
+  opacity: 0; transform: translateX(-4px);
+  transition: opacity 0.15s, transform 0.15s;
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════
+   SCREEN 2 — ITEMS LIST
+══════════════════════════════ */
+.items-header {
+  padding: 0;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+.items-header-top {
+  padding: 20px 28px 20px;
+  display: flex; align-items: center; gap: 14px;
+}
+.back-btn {
+  width: 34px; height: 34px; border-radius: 6px;
+  background: var(--bg); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--muted); font-size: 0.78rem;
+  transition: 0.15s; flex-shrink: 0;
+}
+.back-btn:hover { background: var(--border); color: var(--ink); }
+.items-cat-info { flex: 1; }
+.items-cat-eyebrow {
+  font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.14em; color: var(--accent); margin-bottom: 2px;
+}
+.items-cat-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem; font-weight: 700; line-height: 1; color: var(--ink);
+}
+.items-cat-count { font-size: 0.7rem; color: var(--muted); margin-top: 3px; }
+.items-cat-icon { font-size: 2.2rem; flex-shrink: 0; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex; gap: 6px; padding: 0 28px 14px;
+  overflow-x: auto; scrollbar-width: none;
+}
+.filter-bar::-webkit-scrollbar { display: none; }
+.filter-chip {
+  padding: 5px 13px; border-radius: 4px;
+  border: 1px solid var(--border); background: var(--bg);
+  font-size: 0.7rem; font-weight: 600; color: var(--muted);
+  cursor: pointer; white-space: nowrap; transition: 0.12s;
+}
+.filter-chip:hover { border-color: var(--border2); color: var(--ink); }
+.filter-chip.active {
+  background: var(--accent); border-color: var(--accent);
+  color: #fff;
+}
+
+/* Items list */
+.items-list {
+  padding: 16px 28px 40px;
+  display: flex; flex-direction: column; gap: 0;
+  background: var(--white);
+}
+
+.item-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.12s;
+  animation: slideIn 0.25s ease both;
+  border-radius: 0;
+  margin: 0 -28px; padding-left: 28px; padding-right: 28px;
+}
+.item-row:last-child { border-bottom: none; }
+.item-row:hover { background: var(--bg); }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.item-emoji {
+  font-size: 1.6rem; min-width: 40px; text-align: center; flex-shrink: 0;
+}
+.item-info { flex: 1; min-width: 0; }
+.item-name {
+  font-size: 0.88rem; font-weight: 600; color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.item-desc {
+  font-size: 0.69rem; color: var(--muted); margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.item-tags { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
+.item-tag {
+  font-size: 0.58rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; padding: 1px 6px; border-radius: 3px;
+}
+.tag-veg    { background: #eaf4ef; color: #2a7d52; border: 1px solid #b5dfc8; }
+.tag-nonveg { background: #fdecea; color: #c0392b; border: 1px solid #f0b9b3; }
+.tag-spicy  { background: #fef3e2; color: #b45309; border: 1px solid #f0d09a; }
+.tag-new    { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border); }
+.tag-popular{ background: #f3f0fb; color: #6d28d9; border: 1px solid #d4c9f5; }
+.tag-alc    { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+
+.item-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+.item-price {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem; font-weight: 700; color: var(--ink); white-space: nowrap;
+}
+.item-status {
+  font-size: 0.6rem; font-weight: 700; padding: 2px 7px; border-radius: 3px;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.status-avail { background: var(--success-bg); color: var(--success); }
+.status-low   { background: var(--warning-bg); color: var(--warning); }
+.status-out   { background: var(--danger-bg); color: var(--danger); }
+
+/* Empty state */
+.empty-state {
+  text-align: center; padding: 60px 20px; color: var(--muted);
+}
+.empty-state-icon { font-size: 2rem; margin-bottom: 10px; opacity: 0.35; }
+.empty-state-txt { font-size: 0.8rem; }
+
+/* Toast */
+#toast {
+  display: none; position: fixed; bottom: 20px; right: 20px;
+  background: var(--ink); color: #fff;
+  padding: 10px 16px; border-radius: 6px;
+  font-size: 0.78rem; font-weight: 500;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15); z-index: 9999;
+  max-width: 260px;
+}
+
+/* Unused deco elements from previous version — hidden */
+.bg-atmosphere, .bg-noise, .items-bg-deco { display: none !important; }
+
+@media(max-width:640px) {
+  .page-header { padding: 20px 16px 16px; }
+  .cat-grid { margin: 0 0; }
+  .cat-section-label, .search-wrap, .filter-bar { padding-left: 16px; padding-right: 16px; }
+  .items-header-top { padding: 16px; }
+  .items-list { padding: 12px 16px 32px; }
+  .item-row { margin: 0 -16px; padding-left: 16px; padding-right: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ TOP NAV ══ -->
+<nav class="topnav">
+  <div class="topnav-logo">
+    <div class="logo-box">PR</div>
+    <span>Pabee</span>
+  </div>
+  <div class="role-badge"><i class="fas fa-book-open"></i> Menu</div>
+  <div class="user-chip"><span id="userIcon">🧑‍💼</span> <strong id="userName">Staff</strong></div>
+  <div class="ml-auto" style="display:flex;gap:8px;align-items:center">
+    <div style="display:flex;align-items:center;gap:5px;font-size:0.7rem;color:var(--muted)"><span class="live-dot"></span> Live</div>
+    <div class="nav-clock" id="liveClock">--:--:--</div>
+    <button class="nav-btn-outline" onclick="if(confirm('Logout?')) window.location.href='00_Login_Hub.html'"><i class="fas fa-right-from-bracket"></i> Logout</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════
+     SCREEN 1: CATEGORIES
+══════════════════════════════ -->
+<div class="screen active" id="screen-categories">
+
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-eyebrow">Tonight's Menu</div>
+      <div class="page-title">Full Menu <em>Selection</em></div>
+      <div class="page-sub">Browse by category. Real-time availability synced with kitchen.</div>
+    </div>
+    <div class="page-stats">
+      <div class="page-stat">
+        <div class="page-stat-val">48</div>
+        <div class="page-stat-lbl">Items</div>
+      </div>
+      <div class="page-stat">
+        <div class="page-stat-val">8</div>
+        <div class="page-stat-lbl">Categories</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-wrap">
+    <div class="search-box">
+      <i class="fas fa-magnifying-glass"></i>
+      <input class="search-input" type="text" placeholder="Search any item…" id="globalSearch" oninput="handleGlobalSearch(this.value)">
+    </div>
+  </div>
+
+  <div class="cat-section-label">Food</div>
+  <div class="cat-grid" id="foodCatGrid">
+    <div class="cat-card" onclick="openCategory('starters')">
+      <div class="cat-card-icon-wrap">🍢</div>
+      <div class="cat-card-info">
+        <div class="cat-card-name">Starters</div>
+        <div class="cat-card-sub">Appetisers &amp; small plates</div>
+        <div class="cat-card-count">8 items</div>
+      </div>
+      <div class="cat-card-arrow"><i class="fas fa-chevron-right"></i></div>
+    </div>
+    <div class="cat-card" onclick="openCategory('mains')">
+      <div class="cat-card-icon-wrap">🍛</div>
+      <div class="cat-card-info">
+        <div class="cat-card-name">Mains</div>
+        <div class="cat-card-sub">Curries, rice &amp; the works</div>
+        <div class="cat-card-count">12 items</div>
+      </div>
+      <div class="cat-card-arrow"><i class="fas fa-chevron-right"></i></div>
+    </div>
+    <div class="cat-card" onclick="openCategory('breads')">
+      <div class="cat-card-icon-wrap">🫓</div>
+      <div class="cat-card-info">
+        <div class="cat-card-name">Breads &amp; Sides</div>
+        <div class="cat-card-sub">Naan, roti &amp; accompaniments</div>
+        <div class="cat-card-count">6 items</div>
+      </div>
+      <div class="cat-card-arrow"><i class="fas fa-chevron-right"></i></div>
+    </div>
+    <div class="cat-card" onclick="openCategory('desserts')">
+      <div class="cat-card-icon-wrap">🍮</div>
+      <div class="cat-card-info">
+        <div class="cat-card-name">Desserts</div>
+        <div class="cat-card-sub">Sweet endings</div>
+        <div class="cat-card-count">5 items</div>
+      </div>
+      <div class="cat-card-arrow"><i class="fas fa-chevron-right"></i></div>
+    </div>
+  </div>
+
+  <div class="cat-section-label" style="margin-top:8px">Drinks</div>
+  <div class="cat-grid" id="drinksCatGrid">
+    <div class="cat-card" onclick="openCategory('mocktails')">
+      <div class="cat-card-icon-wrap">🥤</div>
+      <div class="cat-card-info">
+        <div class="cat-card-name">Mocktails</div>
+        <div class="cat-card-sub">Non-alcoholic cocktails</div>
+        <div class="cat-card-count">7 items</div>
+      </div>
+      <div class="cat-card-arrow"><i class="fas fa-chevron-right"></i></div>
+    </div>
+    <div class="cat-card" onclick="openCategory('cocktails')">
+      <div class="cat-card-icon-wrap">🍹</div>
+      <div class="cat-card-info">
+        <div class="cat-card-name">Cocktails</div>
+        <div class="cat-card-sub">Signature &amp; classic mixes</div>
+        <div class="cat-card-count">8 items</div>
+      </div>
+      <div class="cat-card-arrow"><i class="fas fa-chevron-right"></i></div>
+    </div>
+    <div class="cat-card" onclick="openCategory('beer')">
+      <div class="cat-card-icon-wrap">🍺</div>
+      <div class="cat-card-info">
+        <div class="cat-card-name">Beer &amp; Cider</div>
+        <div class="cat-card-sub">Bottled &amp; draught</div>
+        <div class="cat-card-count">4 items</div>
+      </div>
+      <div class="cat-card-arrow"><i class="fas fa-chevron-right"></i></div>
+    </div>
+    <div class="cat-card" onclick="openCategory('spirits')">
+      <div class="cat-card-icon-wrap">🥃</div>
+      <div class="cat-card-info">
+        <div class="cat-card-name">Spirits &amp; Liquor</div>
+        <div class="cat-card-sub">Whisky, vodka, rum &amp; more</div>
+        <div class="cat-card-count">8 items</div>
+      </div>
+      <div class="cat-card-arrow"><i class="fas fa-chevron-right"></i></div>
+    </div>
+  </div>
+
+</div><!-- /screen-categories -->
+
+<!-- ══════════════════════════════
+     SCREEN 2: ITEMS
+══════════════════════════════ -->
+<div class="screen" id="screen-items">
+
+  <div class="items-header">
+    <div class="items-header-top">
+      <div class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></div>
+      <div class="items-cat-info">
+        <div class="items-cat-eyebrow" id="itemsCatEyebrow">Menu</div>
+        <div class="items-cat-title" id="itemsCatTitle">Category</div>
+        <div class="items-cat-count" id="itemsCatCount">— items</div>
+      </div>
+      <div class="items-cat-icon" id="itemsCatIcon">🍽️</div>
+    </div>
+
+    <div class="filter-bar" id="filterBar">
+    <div class="filter-chip active" onclick="filterItems(this,'all')">All</div>
+    <div class="filter-chip" onclick="filterItems(this,'available')">Available</div>
+    <div class="filter-chip" onclick="filterItems(this,'veg')">🌿 Veg</div>
+    <div class="filter-chip" onclick="filterItems(this,'nonveg')">🍖 Non-Veg</div>
+    <div class="filter-chip" onclick="filterItems(this,'popular')">⭐ Popular</div>
+    <div class="filter-chip" onclick="filterItems(this,'new')">✨ New</div>
+  </div>
+  </div><!-- /items-header -->
+
+  <div class="items-list" id="itemsList"></div>
+
+</div><!-- /screen-items -->
+
+<div id="toast"></div>
+
+<script>
+/* ─── USER ─── */
+const user = JSON.parse(sessionStorage.getItem('pabee_user') || '{"name":"Staff","role":"Waiter","icon":"🧑‍💼"}');
+document.getElementById('userName').textContent = user.name;
+document.getElementById('userIcon').textContent = user.icon;
+
+/* ─── CLOCK ─── */
+setInterval(() => {
+  const n = new Date();
+  document.getElementById('liveClock').textContent =
+    [n.getHours(), n.getMinutes(), n.getSeconds()].map(v => String(v).padStart(2,'0')).join(':');
+}, 1000);
+
+/* ─── TOAST ─── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  clearTimeout(t._t); t._t = setTimeout(() => t.style.display = 'none', 2600);
+}
+
+/* ══════════════════════════════
+   MENU DATA
+══════════════════════════════ */
+const MENU = {
+  starters: {
+    name: 'Starters', icon: '🍢', eyebrow: 'Food · First Course',
+    accent: '#ff6030', accent2: '#c0390d',
+    items: [
+      { emoji:'🧀', name:'Paneer Tikka',       desc:'Marinated cottage cheese, tandoor, mint chutney', price:'₹320', tags:['veg','popular','spicy'], status:'available' },
+      { emoji:'🍗', name:'Chicken Wings',       desc:'Crispy fried wings, sriracha glaze, blue cheese dip', price:'₹380', tags:['nonveg','popular','spicy'], status:'available' },
+      { emoji:'🍄', name:'Mushroom Pepper Fry', desc:'Button mushrooms, black pepper, curry leaves', price:'₹280', tags:['veg'], status:'available' },
+      { emoji:'🥩', name:'Seekh Kebab',         desc:'Minced lamb, garam masala, charcoal grilled', price:'₹420', tags:['nonveg','popular'], status:'available' },
+      { emoji:'🌽', name:'Corn Cheese Balls',   desc:'Sweet corn, mozzarella, crispy breadcrumb crust', price:'₹240', tags:['veg','new'], status:'available' },
+      { emoji:'🦑', name:'Calamari Rings',      desc:'Fried squid rings, garlic aioli, lemon wedge', price:'₹480', tags:['nonveg','new'], status:'low' },
+      { emoji:'🥗', name:'Greek Salad',         desc:'Olives, feta, cucumber, tomatoes, oregano dressing', price:'₹260', tags:['veg'], status:'available' },
+      { emoji:'🍤', name:'Prawn Koliwada',      desc:'Batter-fried prawns, kokum chutney, fried curry leaves', price:'₹520', tags:['nonveg','spicy','popular'], status:'available' },
+    ]
+  },
+  mains: {
+    name: 'Mains', icon: '🍛', eyebrow: 'Food · Main Course',
+    accent: '#00a854', accent2: '#004d20',
+    items: [
+      { emoji:'🍛', name:'Butter Chicken',      desc:'Slow-cooked tandoor chicken, rich tomato-cream sauce', price:'₹460', tags:['nonveg','popular'], status:'available' },
+      { emoji:'🍲', name:'Dal Makhani',          desc:'Black lentils, slow cooked 12 hrs, butter & cream', price:'₹340', tags:['veg','popular'], status:'out' },
+      { emoji:'🍚', name:'Veg Biryani',          desc:'Long-grain basmati, seasonal vegetables, saffron', price:'₹380', tags:['veg'], status:'available' },
+      { emoji:'🍗', name:'Chicken Biryani',      desc:'Hyderabadi dum biryani, raita, mirchi salan', price:'₹520', tags:['nonveg','popular','spicy'], status:'available' },
+      { emoji:'🦐', name:'Prawn Masala',         desc:'Tiger prawns, Goan coconut masala, steamed rice', price:'₹680', tags:['nonveg','spicy'], status:'available' },
+      { emoji:'🧀', name:'Shahi Paneer',         desc:'Cottage cheese, cashew-tomato gravy, cream', price:'₹360', tags:['veg'], status:'available' },
+      { emoji:'🐟', name:'Fish Curry',           desc:'King fish, raw mango coconut curry, appam', price:'₹580', tags:['nonveg','spicy','new'], status:'available' },
+      { emoji:'🥘', name:'Mutton Rogan Josh',    desc:'Kashmiri lamb curry, aromatic spices, steam rice', price:'₹620', tags:['nonveg','spicy'], status:'available' },
+      { emoji:'🫕', name:'Kadai Vegetables',     desc:'Mixed veg, kadai masala, capsicum, tomato', price:'₹320', tags:['veg'], status:'available' },
+      { emoji:'🍝', name:'Pasta Arrabbiata',     desc:'Penne, spicy tomato sauce, basil, parmesan', price:'₹340', tags:['veg','spicy'], status:'available' },
+      { emoji:'🥩', name:'Lamb Chops',           desc:'Frenched lamb chops, herb crust, mint jelly, mash', price:'₹860', tags:['nonveg','popular','new'], status:'available' },
+      { emoji:'🫘', name:'Chole Bhature',        desc:'Spiced chickpeas, fluffy deep-fried bread, pickle', price:'₹280', tags:['veg','spicy'], status:'available' },
+    ]
+  },
+  breads: {
+    name: 'Breads & Sides', icon: '🫓', eyebrow: 'Food · Accompaniments',
+    accent: '#d97706', accent2: '#92400e',
+    items: [
+      { emoji:'🍞', name:'Butter Naan',          desc:'Leavened bread, butter brushed, clay oven', price:'₹60', tags:['veg','popular'], status:'available' },
+      { emoji:'🫓', name:'Garlic Naan',          desc:'Naan with garlic butter and coriander', price:'₹80', tags:['veg','popular'], status:'low' },
+      { emoji:'🫓', name:'Tandoori Roti',        desc:'Whole wheat, clay oven, no butter', price:'₹45', tags:['veg'], status:'available' },
+      { emoji:'🫓', name:'Laccha Paratha',       desc:'Multi-layered flaky flatbread, ghee', price:'₹70', tags:['veg'], status:'available' },
+      { emoji:'🍚', name:'Steamed Rice',         desc:'Long grain basmati, aromatic', price:'₹120', tags:['veg'], status:'available' },
+      { emoji:'🥣', name:'Raita',               desc:'Whipped yogurt, cucumber, cumin, mint', price:'₹80', tags:['veg'], status:'available' },
+    ]
+  },
+  desserts: {
+    name: 'Desserts', icon: '🍮', eyebrow: 'Food · Sweet Endings',
+    accent: '#9333ea', accent2: '#ec4899',
+    items: [
+      { emoji:'🍮', name:'Gulab Jamun',          desc:'Milk solids, rose syrup, vanilla ice cream', price:'₹160', tags:['veg','popular'], status:'available' },
+      { emoji:'🍨', name:'Kulfi Falooda',        desc:'Pistachio kulfi, rose falooda, basil seeds', price:'₹200', tags:['veg','popular'], status:'available' },
+      { emoji:'🎂', name:'Chocolate Lava Cake',  desc:'Warm dark chocolate fondant, vanilla gelato', price:'₹280', tags:['veg','popular','new'], status:'available' },
+      { emoji:'🍰', name:'Shahi Tukda',          desc:'Fried bread, sweetened rabri, saffron', price:'₹180', tags:['veg'], status:'available' },
+      { emoji:'🍧', name:'Phirni',               desc:'Rice pudding, rosewater, pistachios, earthen bowl', price:'₹150', tags:['veg','new'], status:'available' },
+    ]
+  },
+  mocktails: {
+    name: 'Mocktails', icon: '🥤', eyebrow: 'Drinks · Non-Alcoholic',
+    accent: '#0d9488', accent2: '#06b6d4',
+    items: [
+      { emoji:'🌿', name:'Virgin Mojito',        desc:'Fresh lime, mint, soda, crushed ice', price:'₹180', tags:['popular'], status:'available' },
+      { emoji:'🫐', name:'Blueberry Lemonade',   desc:'Fresh blueberries, lemon, sparkling water', price:'₹200', tags:['new','popular'], status:'available' },
+      { emoji:'🍓', name:'Strawberry Slush',     desc:'Fresh strawberries, basil, lemon, crushed ice', price:'₹180', tags:[], status:'available' },
+      { emoji:'🥭', name:'Mango Sunrise',        desc:'Alphonso mango, orange, grenadine, soda', price:'₹200', tags:['popular'], status:'available' },
+      { emoji:'🧃', name:'Watermelon Cooler',    desc:'Fresh watermelon, mint, ginger, lime', price:'₹170', tags:[], status:'available' },
+      { emoji:'☕', name:'Iced Coffee',           desc:'Cold brew, milk, vanilla syrup, ice', price:'₹160', tags:[], status:'available' },
+      { emoji:'🍵', name:'Masala Chai',          desc:'Ginger, cardamom, cinnamon, tea, milk', price:'₹80', tags:['popular'], status:'available' },
+    ]
+  },
+  cocktails: {
+    name: 'Cocktails', icon: '🍹', eyebrow: 'Drinks · Alcoholic',
+    accent: '#2563eb', accent2: '#7c3aed',
+    items: [
+      { emoji:'🍸', name:'Classic Mojito',       desc:'White rum, lime, mint, soda, brown sugar', price:'₹380', tags:['alc','popular'], status:'available' },
+      { emoji:'🍹', name:'Pina Colada',          desc:'Coconut rum, pineapple juice, cream of coconut', price:'₹420', tags:['alc','popular'], status:'available' },
+      { emoji:'🍊', name:'Aperol Spritz',        desc:'Aperol, prosecco, orange slice, soda', price:'₹460', tags:['alc','new'], status:'available' },
+      { emoji:'🌶️', name:'Spicy Margarita',      desc:'Tequila, lime, jalapeño, salt rim, agave', price:'₹480', tags:['alc','spicy','popular'], status:'available' },
+      { emoji:'🍋', name:'Whisky Sour',          desc:'Bourbon, lemon juice, egg white, Angostura bitters', price:'₹440', tags:['alc'], status:'available' },
+      { emoji:'🖤', name:'Black Russian',        desc:'Vodka, coffee liqueur, ice', price:'₹420', tags:['alc'], status:'available' },
+      { emoji:'🍑', name:'Sex on the Beach',     desc:'Vodka, peach schnapps, orange, cranberry', price:'₹440', tags:['alc'], status:'available' },
+      { emoji:'🥂', name:'Champagne Cocktail',   desc:'Champagne, brandy, sugar cube, Angostura bitters', price:'₹620', tags:['alc','new'], status:'available' },
+    ]
+  },
+  beer: {
+    name: 'Beer & Cider', icon: '🍺', eyebrow: 'Drinks · Alcoholic',
+    accent: '#ca8a04', accent2: '#a16207',
+    items: [
+      { emoji:'🍺', name:'Kingfisher Premium',   desc:'330ml · Light lager, crisp finish', price:'₹220', tags:['alc','popular'], status:'low' },
+      { emoji:'🍺', name:'Heineken',             desc:'330ml · Dutch pilsner, mild bitterness', price:'₹280', tags:['alc'], status:'available' },
+      { emoji:'🍺', name:'Bira 91 White',        desc:'330ml · Indian wheat beer, citrus notes', price:'₹260', tags:['alc','popular','new'], status:'available' },
+      { emoji:'🍻', name:'Hoegaarden',           desc:'330ml · Belgian wheat, coriander, orange peel', price:'₹320', tags:['alc'], status:'available' },
+    ]
+  },
+  spirits: {
+    name: 'Spirits & Liquor', icon: '🥃', eyebrow: 'Drinks · Alcoholic',
+    accent: '#7c3aed', accent2: '#be185d',
+    items: [
+      { emoji:'🥃', name:"Jack Daniel's",        desc:'60ml · Tennessee whiskey, smooth & smoky', price:'₹460', tags:['alc','popular'], status:'available' },
+      { emoji:'🥃', name:'Johnnie Walker Black', desc:'60ml · Scotch blended, 12yr, peaty & rich', price:'₹680', tags:['alc','popular'], status:'available' },
+      { emoji:'🍸', name:'Smirnoff Vodka',       desc:'60ml · Triple distilled, neutral spirit', price:'₹320', tags:['alc'], status:'out' },
+      { emoji:'🍸', name:'Grey Goose Vodka',     desc:'60ml · French wheat vodka, ultra premium', price:'₹780', tags:['alc','popular'], status:'available' },
+      { emoji:'🥃', name:'Old Monk Rum',         desc:'60ml · Dark rum, 7yr aged, vanilla & spice', price:'₹280', tags:['alc','popular'], status:'low' },
+      { emoji:'🍾', name:'Bacardi White Rum',    desc:'60ml · Light rum, subtle sweetness', price:'₹300', tags:['alc'], status:'available' },
+      { emoji:'🌵', name:'Jose Cuervo Tequila',  desc:'60ml · Gold tequila, agave, smooth finish', price:'₹480', tags:['alc'], status:'available' },
+      { emoji:'🍑', name:'Cointreau',            desc:'60ml · French triple sec, bitter orange', price:'₹520', tags:['alc','new'], status:'available' },
+    ]
+  }
+};
+
+/* ── CURRENT STATE ── */
+let currentCategory = null;
+let currentFilter   = 'all';
+
+/* ── OPEN CATEGORY ── */
+function openCategory(catKey) {
+  const cat = MENU[catKey];
+  if (!cat) return;
+  currentCategory = catKey;
+  currentFilter   = 'all';
+
+  /* update header */
+  document.getElementById('itemsCatEyebrow').textContent = cat.eyebrow;
+  document.getElementById('itemsCatTitle').textContent   = cat.name;
+  document.getElementById('itemsCatIcon').textContent    = cat.icon;
+
+  /* count */
+  const avail = cat.items.filter(i => i.status !== 'out').length;
+  document.getElementById('itemsCatCount').textContent =
+    `${cat.items.length} items · ${avail} available`;
+
+  /* bg deco colour — removed in pro version */
+
+  /* reset filter chips */
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  document.querySelector('.filter-chip').classList.add('active');
+
+  /* render */
+  renderItems(cat.items);
+
+  /* switch screens */
+  document.getElementById('screen-categories').classList.remove('active');
+  document.getElementById('screen-items').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── RENDER ITEMS ── */
+function renderItems(items) {
+  const list = document.getElementById('itemsList');
+  const filter = currentFilter;
+
+  const filtered = items.filter(item => {
+    if (filter === 'all')       return true;
+    if (filter === 'available') return item.status === 'available';
+    if (filter === 'veg')       return item.tags.includes('veg');
+    if (filter === 'nonveg')    return item.tags.includes('nonveg');
+    if (filter === 'popular')   return item.tags.includes('popular');
+    if (filter === 'new')       return item.tags.includes('new');
+    return true;
+  });
+
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty-state">
+      <div class="empty-state-icon">🔍</div>
+      <div class="empty-state-txt">No items match this filter</div>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map((item, idx) => {
+    const statusBadge =
+      item.status === 'out'  ? '<span class="item-status status-out">Out of Stock</span>' :
+      item.status === 'low'  ? '<span class="item-status status-low">Low Stock</span>'    :
+                               '<span class="item-status status-avail">Available</span>';
+
+    const tags = item.tags.map(t => {
+      const cls = { veg:'tag-veg', nonveg:'tag-nonveg', spicy:'tag-spicy', new:'tag-new', popular:'tag-popular', alc:'tag-alc' }[t] || '';
+      const lbl = { veg:'🌿 Veg', nonveg:'🍖 Non-Veg', spicy:'🌶 Spicy', new:'✨ New', popular:'⭐ Popular', alc:'🍷 Alc' }[t] || t;
+      return `<span class="item-tag ${cls}">${lbl}</span>`;
+    }).join('');
+
+    const opacity = item.status === 'out' ? 'opacity:0.5' : '';
+
+    return `<div class="item-row" style="${opacity};animation-delay:${idx * 0.04}s"
+      onclick="${item.status === 'out' ? "showToast('❌ Item unavailable')" : `showToast('Added ${item.name} to order note')`}">
+      <div class="item-emoji">${item.emoji}</div>
+      <div class="item-info">
+        <div class="item-name">${item.name}</div>
+        <div class="item-desc">${item.desc}</div>
+        <div class="item-tags">${tags}</div>
+      </div>
+      <div class="item-right">
+        <div class="item-price">${item.price}</div>
+        ${statusBadge}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── FILTER ── */
+function filterItems(el, filter) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderItems(MENU[currentCategory].items);
+}
+
+/* ── BACK ── */
+function goBack() {
+  document.getElementById('screen-items').classList.remove('active');
+  document.getElementById('screen-categories').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── GLOBAL SEARCH ── */
+function handleGlobalSearch(q) {
+  q = q.toLowerCase().trim();
+  if (!q) return;
+
+  // Collect all items across all categories
+  const results = [];
+  for (const [key, cat] of Object.entries(MENU)) {
+    cat.items.forEach(item => {
+      if (item.name.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q)) {
+        results.push({ ...item, _catKey: key, _catName: cat.name });
+      }
+    });
+  }
+
+  if (!results.length) {
+    showToast('No items found for "' + q + '"');
+    return;
+  }
+
+  // Build fake "search results" category
+  currentCategory = '__search__';
+  currentFilter = 'all';
+  MENU['__search__'] = { name: 'Search Results', icon: '🔍', eyebrow: 'Search', accent: '#c9a84c', accent2: '#a0782a', items: results };
+
+  document.getElementById('itemsCatEyebrow').textContent = 'Search Results';
+  document.getElementById('itemsCatTitle').textContent   = `"${q}"`;
+  document.getElementById('itemsCatCount').textContent   = `${results.length} item${results.length !== 1 ? 's' : ''} found`;
+  document.getElementById('itemsCatIcon').textContent    = '🔍';
+
+  document.getElementById('blobA') && (document.getElementById('blobA').style.background = '#c84b2f');
+  document.getElementById('blobB') && (document.getElementById('blobB').style.background = '#a0782a');
+
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  document.querySelector('.filter-chip').classList.add('active');
+
+  renderItems(results);
+
+  document.getElementById('screen-categories').classList.remove('active');
+  document.getElementById('screen-items').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
